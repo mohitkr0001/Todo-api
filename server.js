@@ -1,21 +1,11 @@
 var express=require('express');
 var app=express();
+var bodyParser=require('body-parser');
 var port=process.env.PORT || 3000;
-var todos=[{
-  id:1,
-  description:'homework',
-  complete:false
-},
-{
-  id:2,
-  description:'Ground',
-  complete:false
-},
-{
-  id:3,
-  description:'coding',
-  complete:false
-}]
+let bodyId=1;
+var todos=[];
+
+app.use(bodyParser.json());
 
 app.get('/',function(req,res){
   res.send('Todo api just got working');
@@ -42,7 +32,12 @@ app.get('/todos/:id',function(req,res){
   }
 });
 
-
+app.post('/todos',(req,res) => {
+  let bodyElement=req.body;
+  bodyElement.id=bodyId++;
+  todos.push(bodyElement)
+  res.json(todos);
+});
 
 app.listen(port,function(){
   console.log('Sevver start working on port no: ' + port);
